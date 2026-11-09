@@ -1,4 +1,4 @@
-package dados;
+package fixos;
 
 import domain.Grafo;
 
