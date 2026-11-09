@@ -1,29 +1,17 @@
 package domain;
 
 public class Ponto {
-    private String nome;
-    private String endereco;
-    private int grupo;
+    private final String nome;
+    private final String endereco;
+    private final int indice;   // posição do ponto no vetor da UniaoBusca (não muda)
 
-    public Ponto(String nome, String endereco, int grupo){
+    public Ponto(String nome, String endereco, int indice) {
         this.nome = nome;
         this.endereco = endereco;
-        this.grupo = grupo;
+        this.indice = indice;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public int getGrupo() {
-        return grupo;
-    }
-
-    public void setGrupo(int grupo) {
-        this.grupo = grupo;
-    }
+    public String getNome() { return nome; }
+    public String getEndereco() { return endereco; }
+    public int getIndice() { return indice; }
 }

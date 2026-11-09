@@ -22,6 +22,15 @@ public class Grafo {
         return unidade;
     }
 
+    public List<Ponto> getPontos() {
+        return new ArrayList<>(pontos.values());
+    }
+
+    // verifica se já existe um ponto com esse nome
+    public boolean existePonto(String nome) {
+        return pontos.containsKey(normalizar(nome));
+    }
+
     // padronizar a nomeclatura para evitar duplicidade
     private String normalizar(String nome){
         return nome.trim().toUpperCase().replaceAll(" ", "_");
@@ -92,5 +101,21 @@ public class Grafo {
     // lista das arestas
     public List<Aresta> getArestas() {
         return new ArrayList<>(arestas);
+    }
+
+    // devolve os pontos que não aparecem em nenhuma aresta
+    public List<Ponto> getPontosIsolados() {
+        List<Ponto> isolados = new ArrayList<>();
+        for (Ponto p : pontos.values()) {
+            boolean temLigacao = false;
+            for (Aresta a : arestas) {
+                if (a.getPonto1() == p || a.getPonto2() == p) {
+                    temLigacao = true;
+                    break;
+                }
+            }
+            if (!temLigacao) isolados.add(p);
+        }
+        return isolados;
     }
 }

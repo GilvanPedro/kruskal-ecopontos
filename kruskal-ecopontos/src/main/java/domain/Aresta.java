@@ -24,6 +24,11 @@ public class Aresta implements Comparable<Aresta>{
     }
 
     @Override
+    public String toString() {
+        return ponto1.getNome() + " - " + ponto2.getNome() + " (" + peso + ")";
+    }
+
+    @Override
     public int compareTo(Aresta outra) {
         int porPeso = Double.compare(this.peso, outra.peso);
         if (porPeso != 0) return porPeso;
