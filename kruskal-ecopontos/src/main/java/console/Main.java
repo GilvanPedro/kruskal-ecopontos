@@ -1,6 +1,6 @@
 package console;
 
-import dados.GrafosExemplo;
+import fixos.GrafosExemplo;
 import domain.Aresta;
 import domain.Grafo;
 import domain.Kruskal;
@@ -58,7 +58,7 @@ public class Main {
 
     private static void executarAF() {
         System.out.println("=== Grafo A–F (peso em horas) ===");
-        Kruskal.executar(GrafosExemplo.grafoAF());
+        System.out.print(Kruskal.executar(GrafosExemplo.grafoAF()));
     }
 
     // Ecopontos
@@ -66,7 +66,7 @@ public class Main {
     // roda nos ecopontos atuais: os 5 originais + os que o usuário adicionou
     private static void executarEcopontos() {
         System.out.println("=== Ecopontos Comurg (peso = média ida/volta em km, Google Maps, 07/11/2026) ===");
-        Kruskal.executar(ecopontos);
+        System.out.print(Kruskal.executar(ecopontos));
     }
 
     // descarta os pontos adicionados e volta para o case original (53,9 km)

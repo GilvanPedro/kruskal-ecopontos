@@ -28,7 +28,7 @@ public class GrafosExemplo {
     }
 
     // Case real: ecopontos da Comurg
-    // Peso = média, em km, das distâncias de ida e volta no Google Maps (07/11/2026)
+    // Peso = média, em km, das distâncias de ida e volta no Google Maps tiradas no dia 07/11/2026
     public static Grafo grafoEcopontos() {
         Grafo g = new Grafo("km");
 
