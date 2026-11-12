@@ -30,13 +30,19 @@ O resultado indica a rede de ligações mais econômica entre os ecopontos. Ele 
 
 1. Ordena todas as ligações da menor para a maior.
 2. Testa cada ligação, na ordem:
-    - se as duas pontas estão em **grupos diferentes**, aceita a ligação e junta os grupos;
-    - se estão no **mesmo grupo**, já existe caminho entre elas, então descarta, porque formaria ciclo.
+   - se as duas pontas estão em **grupos diferentes**, aceita a ligação e junta os grupos;
+   - se estão no **mesmo grupo**, já existe caminho entre elas, então descarta, porque formaria ciclo.
 3. Para ao aceitar `n - 1` ligações.
 
 O controle dos grupos é feito pela estrutura de união-busca (`UniaoBusca`). Cada ponto tem um índice, que é a sua posição no vetor de grupos.
 
 **Complexidade:** O(m log m), em que `m` é o número de ligações. O custo é dominado pela ordenação.
+
+### Parada em n - 1 e modo de visualização
+
+O método `Kruskal.executar(grafo)` segue o algoritmo como ele é: para assim que a árvore tem `n - 1` ligações.
+
+A interface gráfica chama `Kruskal.executar(grafo, true)`, que continua testando as ligações restantes depois da árvore completa. Isso serve só para visualização: mostra que todas as ligações que sobraram formariam ciclo. A árvore e o custo total são os mesmos nos dois modos.
 
 ## Os dois grafos
 
@@ -82,6 +88,8 @@ Quando duas ligações têm o mesmo peso, o desempate é pela ordem alfabética 
 
 ## Resultados
 
+Saída da interface gráfica, que testa todas as ligações. As descartadas que aparecem depois da última aceita só confirmam que formariam ciclo.
+
 ### Grafo A–F
 
 ```
@@ -91,6 +99,8 @@ Aceita:     A - B (4 h)
 Aceita:     E - D (4 h)
 Descartada: B - C (5 h) -> formaria ciclo
 Aceita:     E - F (8 h)
+Descartada: B - D (10 h) -> formaria ciclo
+Descartada: D - F (11 h) -> formaria ciclo
 Custo total: 21 h
 ```
 
@@ -104,58 +114,75 @@ Descartada: Faiçalville - Parque Eldorado Oeste (16,1 km) -> formaria ciclo
 Descartada: São José - Campos Dourados (18,9 km) -> formaria ciclo
 Descartada: Campos Dourados - Parque Eldorado Oeste (21,05 km) -> formaria ciclo
 Aceita:     Guanabara - Faiçalville (25,85 km)
+Descartada: Guanabara - São José (26,3 km) -> formaria ciclo
+Descartada: Guanabara - Parque Eldorado Oeste (27,75 km) -> formaria ciclo
+Descartada: Guanabara - Campos Dourados (39,7 km) -> formaria ciclo
 Custo total: 53,9 km
 ```
 
-Os quatro ecopontos da região sudoeste ficam próximos entre si. O Guanabara, isolado no nordeste da cidade, entra na rede por uma única ligação, a mais curta disponível para ele.
+Os quatro ecopontos das regiões oeste e sudoeste ficam próximos entre si. O Guanabara, isolado no nordeste da cidade, entra na rede por uma única ligação, a mais curta disponível para ele.
 
 ## Estrutura do projeto
 
+Projeto Maven.
+
 ```
-src/
-├── domain/
-│   ├── Ponto.java          nome, endereço e índice de cada local
-│   ├── Aresta.java         ligação entre dois pontos com um peso
-│   ├── Grafo.java          cadastro e validação de pontos e ligações
-│   ├── UniaoBusca.java     grupos usados para detectar ciclos
-│   └── Kruskal.java        o algoritmo
-├── dados/
-│   └── GrafosExemplo.java  grafo A–F e grafo dos ecopontos
-└── console/
-    └── Main.java           menu do programa
+kruskal-ecopontos/
+├── pom.xml
+└── src/main/java/
+    ├── domain/
+    │   ├── Ponto.java             nome, endereço e índice de cada local
+    │   ├── Aresta.java            ligação entre dois pontos com um peso
+    │   ├── Grafo.java             cadastro e validação de pontos e ligações
+    │   ├── UniaoBusca.java        grupos usados para detectar ciclos
+    │   └── Kruskal.java           o algoritmo; devolve o resultado como texto
+    ├── fixos/
+    │   └── GrafosExemplo.java     grafo A–F e grafo dos ecopontos
+    ├── swing/
+    │   ├── MainSwing.java         abre a interface gráfica
+    │   ├── JanelaPrincipal.java   janela com botões, lista de ecopontos e abas
+    │   ├── DialogoCadastro.java   cadastro de um ponto novo com suas ligações
+    │   ├── DialogoLigacao.java    nova ligação entre pontos existentes
+    │   ├── Validacoes.java        leitura e validação das distâncias
+    │   └── AjusteDialogo.java     ajuste de tamanho dos diálogos
+    └── console/
+        └── Main.java              versão em terminal, com menu
 ```
+
+O pacote `domain` não depende da interface: a janela Swing e o menu do terminal usam as mesmas classes e o mesmo método `Kruskal.executar()`.
 
 ## Como executar
 
-Requer Java 17 ou superior.
+Abra a pasta `kruskal-ecopontos` numa IDE com suporte a Maven (IntelliJ, por exemplo) e execute a classe `swing.MainSwing`.
 
-Pela linha de comando, a partir da pasta do projeto:
+Pela linha de comando, a partir da pasta `kruskal-ecopontos`:
 
 ```bash
-javac -encoding UTF-8 -d out $(find src -name "*.java")
-java -cp out console.Main
+javac -encoding UTF-8 -d out $(find src/main/java -name "*.java")
+java -cp out swing.MainSwing
 ```
 
-Também é possível abrir o projeto numa IDE e executar a classe `console.Main`.
+A versão em terminal continua disponível em `console.Main`.
 
-## Menu
+## Interface gráfica
 
-```
-1 - Executar Kruskal no grafo A–F (exemplo do professor)
-2 - Executar Kruskal nos ecopontos
-3 - Listar ecopontos e ligações
-4 - Adicionar novo ecoponto
-5 - Adicionar ligação entre ecopontos existentes
-6 - Restaurar os 5 ecopontos originais
-0 - Sair
-```
+A janela principal tem:
 
-Os ecopontos adicionados pelo usuário entram no mesmo grafo dos originais, e as opções 2 e 3 passam a considerá-los. A opção 6 volta ao case original.
+- **Cadastrar ponto:** abre um diálogo para informar nome, endereço e as ligações do ponto novo (ecoponto de destino, distância de ida e de volta). Dá para adicionar várias ligações antes de salvar.
+- **Nova ligação:** liga dois ecopontos que já existem.
+- **Kruskal ecopontos:** executa o algoritmo no grafo dos ecopontos, incluindo os pontos cadastrados.
+- **Kruskal A–F:** executa o algoritmo no grafo do professor.
+- **Lista de ecopontos cadastrados**, à esquerda.
+- **Aba Resultado:** ligações aceitas, descartadas e custo total.
+- **Aba Ligações:** tabela com todas as ligações do grafo exibido, ordenável pelo cabeçalho.
+
+As fontes se ajustam ao tamanho da janela.
 
 ### Validações
 
-- Todo ponto novo precisa ser ligado a pelo menos um ponto existente.
-- Distâncias precisam ser maiores que zero e aceitam vírgula ou ponto (ex.: `11,4`).
+- O botão Salvar do cadastro só fica habilitado com pelo menos uma ligação: todo ponto novo precisa estar ligado a um ponto existente.
+- O ponto e as ligações só entram no grafo depois que tudo foi validado.
+- Distâncias aceitam vírgula ou ponto (ex.: `11,4`), precisam ser maiores que zero e têm limite de 200 km.
 - Não é permitido cadastrar um ponto com nome repetido, ligar um ponto a ele mesmo ou repetir uma ligação já existente.
 - Nomes são comparados sem diferenciar maiúsculas e minúsculas nem espaços extras.
 - Se a rede ficar desconectada, o programa avisa que não existe árvore geradora e lista os pontos sem nenhuma ligação.
@@ -166,6 +193,7 @@ Os ecopontos adicionados pelo usuário entram no mesmo grafo dos originais, e as
 - A média entre ida e volta é uma simplificação para tratar a rede como não dirigida.
 - O modelo considera apenas os cinco ecopontos permanentes, sem os pontos provisórios de descarte.
 - O custo total é a soma das ligações escolhidas, não a distância de um percurso real.
+- Os pontos cadastrados pela interface ficam só na memória e se perdem ao fechar o programa.
 
 ## Fontes
 
