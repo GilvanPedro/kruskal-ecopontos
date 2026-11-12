@@ -61,7 +61,7 @@ Seis centros de distribuição fictícios. O peso é o tempo de transporte em **
 
 Quando duas ligações têm o mesmo peso, o desempate é pela ordem alfabética do primeiro ponto.
 
-### Ecopontos Comurg (case real)
+### Ecopontos Comurg (caso real)
 
 | Ecoponto | Endereço |
 |---|---|
